@@ -43,7 +43,7 @@ Direct, helpful, and practical.
 
     config = types.GenerateContentConfig(
         system_instruction=system_prompt,
-        max_output_tokens=400,
+        max_output_tokens=800,
         temperature=0.4
     )
 
