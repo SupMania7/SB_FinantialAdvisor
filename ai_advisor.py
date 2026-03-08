@@ -2,13 +2,10 @@
 import streamlit as st
 from google.genai import types
 import os
-from functions.visualization import generate_image_tool, generate_image
+from functions.visualization import generate_image
 
 
 def advisor(client):
-    """
-    Handles the financial advisor workflow using Gemini
-    """
 
     st.title("💰 AI Financial Advisor")
     st.write("Get personalized financial insights powered by Gemini AI")
@@ -16,16 +13,9 @@ def advisor(client):
     system_prompt = """You are a professional AI Financial Advisor.
 
 Analyze the user's financial data and give structured advice.
-
-You may generate visual diagrams or charts if it helps explain financial planning.
 """
 
-    available_functions = types.Tool(
-        function_declarations=[generate_image_tool]
-    )
-
     config = types.GenerateContentConfig(
-        tools=[available_functions],
         system_instruction=system_prompt
     )
 
@@ -41,6 +31,20 @@ You may generate visual diagrams or charts if it helps explain financial plannin
         placeholder="Example: Save ₹5,00,000 in 3 years"
     )
 
+    # ---------------- OPTIONAL VISUALIZATION INPUT ---------------- #
+
+    generate_chart = st.checkbox("Generate Financial Diagram")
+
+    chart_prompt = None
+
+    if generate_chart:
+        chart_prompt = st.text_input(
+            "Describe the chart you want",
+            placeholder="Example: pie chart of my finances"
+        )
+
+    # ---------------- GENERATE PLAN ---------------- #
+
     if st.button("Generate Financial Plan"):
 
         user_prompt = f"""
@@ -53,44 +57,31 @@ Debt: ₹{debt}
 Goal: {goal}
 """
 
-        messages = [
-            types.Content(
-                role="user",
-                parts=[types.Part(text=user_prompt)]
-            )
-        ]
-
         with st.spinner("Analyzing your finances..."):
 
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
-                contents=messages,
+                contents=user_prompt,
                 config=config
             )
 
-        candidate = response.candidates[0]
-        part = candidate.content.parts[0]
-
-        if response.function_calls:
-
-            for function_call in response.function_calls:
-
-                if function_call.name == "generate_image":
-
-                    args = function_call.args
-
-                    generate_image(
-                        prompt=args.get("prompt"),
-                        width=args.get("width", 1024),
-                        height=args.get("height", 1024)
-                    )
-
         st.subheader("📊 AI Financial Advice")
-        st.write(part.text)
+        st.write(response.text)
 
-        image_path = "generated_images/generated_image.png"
+        # ---------------- OPTIONAL CHART GENERATION ---------------- #
 
-        if os.path.exists(image_path):
+        if generate_chart and chart_prompt:
+
             st.subheader("📈 Financial Visualization")
-            st.image(image_path, use_container_width=True)
+
+            path = generate_image(
+                prompt=chart_prompt,
+                income=income,
+                expenses=expenses,
+                savings=savings,
+                debt=debt
+            )
+
+            if os.path.exists(path):
+                st.image(path, use_container_width=True)
 
