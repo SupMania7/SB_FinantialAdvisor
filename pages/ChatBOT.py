@@ -3,7 +3,9 @@ import streamlit as st
 from google import genai
 import os
 from dotenv import load_dotenv
+from functions.executefunc import load_css
 
+load_css()
 load_dotenv()
 
 

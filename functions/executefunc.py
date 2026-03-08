@@ -1,6 +1,10 @@
 from functions.visualization import generate_image
 from google.genai import types
+import streamlit as st
 
+def load_css():
+    with open("styles/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 def call_function(function_call_part, verbose=False):
 
