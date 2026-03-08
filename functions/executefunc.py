@@ -1,0 +1,42 @@
+from functions.createworkflow import generate_image
+from google.genai import types
+
+
+def call_function(function_call_part, verbose=False):
+
+    if verbose:
+        print("Function call:", function_call_part.name)
+        print("Arguments:", function_call_part.args)
+    else:
+        print("Calling function:", function_call_part.name)
+
+    result = None
+
+    # Image generation tool
+    if function_call_part.name == "generate_image":
+        result = generate_image(**function_call_part.args)
+
+    # Unknown tool handling
+    if result is None:
+        return types.Content(
+            role="tool",
+            parts=[
+                types.Part.from_function_response(
+                    name=function_call_part.name,
+                    response={
+                        "error": f"Unknown function: {function_call_part.name}"
+                    }
+                )
+            ],
+        )
+
+    # Successful tool execution
+    return types.Content(
+        role="tool",
+        parts=[
+            types.Part.from_function_response(
+                name=function_call_part.name,
+                response={"result": result}
+            )
+        ],
+    )
