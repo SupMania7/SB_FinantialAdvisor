@@ -1,4 +1,4 @@
-from functions.createworkflow import generate_image
+from functions.visualization import generate_image
 from google.genai import types
 
 

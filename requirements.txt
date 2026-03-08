@@ -3,3 +3,5 @@ python-dotenv
 streamlit
 gradio-client
 huggingface_hub
+matplotlib
+seaborn
