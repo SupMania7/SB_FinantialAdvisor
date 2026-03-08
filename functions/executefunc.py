@@ -1,13 +1,21 @@
 from functions.visualization import generate_image
 from google.genai import types
 import streamlit as st
+import os
 
 
 def load_css(theme="dark"):
+
     css_path = f"styles/{theme}.css"
 
-    with open(css_path) as f:
-        css = f.read()
+    css = ""
+
+    # Prevent crash if file missing
+    if os.path.exists(css_path):
+        with open(css_path) as f:
+            css = f.read()
+    else:
+        st.warning(f"CSS file not found: {css_path}")
 
     custom_chat_css = """
     [data-testid="stChatInput"] {
@@ -50,36 +58,40 @@ def load_css(theme="dark"):
 
 def call_function(function_call_part, verbose=False):
 
-    if verbose:
-        print("Function call:", function_call_part.name)
-        print("Arguments:", function_call_part.args)
-    else:
-        print("Calling function:", function_call_part.name)
+    try:
 
-    result = None
+        if verbose:
+            print("Function call:", function_call_part.name)
+            print("Arguments:", function_call_part.args)
+        else:
+            print("Calling function:", function_call_part.name)
 
-    if function_call_part.name == "generate_image":
-        result = generate_image(**function_call_part.args)
+        result = None
 
-    if result is None:
+        if function_call_part.name == "generate_image":
+            result = generate_image(**function_call_part.args)
+
+        if result is None:
+            raise ValueError(f"Unknown function: {function_call_part.name}")
+
         return types.Content(
             role="tool",
             parts=[
                 types.Part.from_function_response(
                     name=function_call_part.name,
-                    response={
-                        "error": f"Unknown function: {function_call_part.name}"
-                    }
+                    response={"result": result}
                 )
             ],
         )
 
-    return types.Content(
-        role="tool",
-        parts=[
-            types.Part.from_function_response(
-                name=function_call_part.name,
-                response={"result": result}
-            )
-        ],
-    )
+    except Exception as e:
+
+        return types.Content(
+            role="tool",
+            parts=[
+                types.Part.from_function_response(
+                    name=function_call_part.name,
+                    response={"error": str(e)}
+                )
+            ],
+        )
