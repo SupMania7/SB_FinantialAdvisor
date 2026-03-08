@@ -2,9 +2,51 @@ from functions.visualization import generate_image
 from google.genai import types
 import streamlit as st
 
-def load_css():
-    with open("styles/style.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+def load_css(theme="dark"):
+    css_path = f"styles/{theme}.css"
+
+    with open(css_path) as f:
+        css = f.read()
+
+    custom_chat_css = """
+    [data-testid="stChatInput"] {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    [data-testid="stChatInput"] textarea {
+        border-radius: 20px !important;
+        border: 1px solid #444 !important;
+        padding: 14px 18px !important;
+        background-color: #1e1e1e !important;
+        color: white !important;
+        font-size: 16px !important;
+    }
+
+    [data-testid="stChatInput"] textarea:focus {
+        outline: none !important;
+        border: 1px solid #666 !important;
+        box-shadow: none !important;
+    }
+
+    [data-testid="stChatInput"] button {
+        border-radius: 50% !important;
+        background: #2b2b2b !important;
+        border: none !important;
+    }
+
+    [data-testid="stChatInput"] button:hover {
+        background: #3a3a3a !important;
+    }
+    """
+
+    st.markdown(
+        f"<style>{css}{custom_chat_css}</style>",
+        unsafe_allow_html=True
+    )
+
 
 def call_function(function_call_part, verbose=False):
 
@@ -16,11 +58,9 @@ def call_function(function_call_part, verbose=False):
 
     result = None
 
-   
     if function_call_part.name == "generate_image":
         result = generate_image(**function_call_part.args)
 
-    
     if result is None:
         return types.Content(
             role="tool",
@@ -34,7 +74,6 @@ def call_function(function_call_part, verbose=False):
             ],
         )
 
-    
     return types.Content(
         role="tool",
         parts=[

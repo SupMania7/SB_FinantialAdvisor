@@ -1,0 +1,98 @@
+
+
+
+.stApp {
+    background: linear-gradient(135deg,#041b12,#052a18,#03160f);
+    color: #81c09f;
+    font-family: "Inter", sans-serif;
+}
+
+
+
+h1 {
+    color: #eafff3 !important;
+    font-weight: 700;
+}
+
+h2, h3 {
+    color: #c8ffe6;
+}
+
+p {
+    color: #7dd3a7;
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+
+
+.stNumberInput input,
+.stTextInput input,
+textarea {
+    background: #0c243e;
+    color: #eafff3;
+    border-radius: 10px;
+    border: 1px solid rgba(34,197,94,0.3);
+    padding: 10px;
+}
+
+.stNumberInput input:focus,
+.stTextInput input:focus,
+textarea:focus {
+    border: 1px solid #22c55e;
+    box-shadow: 0 0 6px rgba(34,197,94,0.6);
+}
+
+
+
+.stCheckbox label {
+    color: #d1fae5;
+}
+
+
+
+button[data-testid="baseButton-secondary"] {
+    background: linear-gradient(90deg,#22c55e,#16a34a) !important;
+    color: rgb(86, 170, 120) !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 14px !important;
+    
+}
+
+.stButton button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 66, 24, 0.611);
+}
+
+
+
+[data-testid="stSidebar"] {
+    background: #065235;
+}
+[data-testid="stChatInput"] {
+    margin-bottom: 10px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+[data-testid="stChatInput"] {
+    border: 1px solid rgba(34,197,94,0.3) !important;
+    border-radius: 14px !important;
+}
+
+
+[data-testid="stChatInput"]:focus-within {
+    border: 1px solid #22c55e !important;
+    box-shadow: 0 0 8px rgba(34,197,94,0.6) !important;
+}
+
+
+[data-testid="stChatInput"] textarea:focus {
+    outline: none !important;
+    border: none !important;
+}

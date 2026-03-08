@@ -5,8 +5,6 @@ import os
 from functions.visualization import generate_image
 from functions.executefunc import load_css
 
-load_css()
-
 def advisor(client):
 
     st.title("AI Financial Advisor")
