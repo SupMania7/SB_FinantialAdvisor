@@ -7,7 +7,7 @@ from functions.visualization import generate_image
 
 def advisor(client):
 
-    st.title("💰 AI Financial Advisor")
+    st.title("AI Financial Advisor")
     st.write("Get personalized financial insights powered by Gemini AI")
 
     system_prompt = """You are a professional AI Financial Advisor.
@@ -31,7 +31,7 @@ Analyze the user's financial data and give structured advice.
         placeholder="Example: Save ₹5,00,000 in 3 years"
     )
 
-    # ---------------- OPTIONAL VISUALIZATION INPUT ---------------- #
+   
 
     generate_chart = st.checkbox("Generate Financial Diagram")
 
@@ -43,7 +43,7 @@ Analyze the user's financial data and give structured advice.
             placeholder="Example: pie chart of my finances"
         )
 
-    # ---------------- GENERATE PLAN ---------------- #
+    
 
     if st.button("Generate Financial Plan"):
 
@@ -68,7 +68,7 @@ Goal: {goal}
         st.subheader("📊 AI Financial Advice")
         st.write(response.text)
 
-        # ---------------- OPTIONAL CHART GENERATION ---------------- #
+       
 
         if generate_chart and chart_prompt:
 

@@ -14,7 +14,7 @@ def main():
 
     st.set_page_config(page_title="AI Financial Advisor", layout="wide")
 
-    # Main financial advisor page
+    
     advisor(client)
 
 

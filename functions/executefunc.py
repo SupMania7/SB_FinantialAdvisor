@@ -12,11 +12,11 @@ def call_function(function_call_part, verbose=False):
 
     result = None
 
-    # Image generation tool
+   
     if function_call_part.name == "generate_image":
         result = generate_image(**function_call_part.args)
 
-    # Unknown tool handling
+    
     if result is None:
         return types.Content(
             role="tool",
@@ -30,7 +30,7 @@ def call_function(function_call_part, verbose=False):
             ],
         )
 
-    # Successful tool execution
+    
     return types.Content(
         role="tool",
         parts=[
